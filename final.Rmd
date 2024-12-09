@@ -1,0 +1,936 @@
+---
+title: "final project"
+author: "Shiqi"
+date: "2024-12-06"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Working with databases ##
+
+```{r, echo=FALSE}
+library(lubridate)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+options(repos = c(CRAN = "https://cran.rstudio.com/"))
+install.packages("ggpubr")
+library(ggpubr)
+data=read.csv("train.csv")   #???train or test
+
+# Remove missing data
+summary(data)
+
+# Select the predictors from both literature and interests to constrcuct a new data_set
+#specific_columns <- c("Customer.Type", "Class", "Type.of.Travel",
+#                      "Online.boarding","Leg.room.service","Ease.of.Online.booking","Cleanliness","satisfaction")
+#data_select <- data_random[,specific_columns]
+#summary(data_select)
+
+#get the summary of all categorical variables
+category_var1 <- table(data$Gender)
+print(category_var1)
+
+category_var2 <- table(data$Ethnicity)
+print(category_var2)
+
+category_var3 <- table(data$EducationLevel)
+print(category_var3)
+
+category_var4 <- table(data$Smoking)
+print(category_var4)
+
+category_var5 <- table(data$FamilyHistoryAlzheimers)
+print(category_var5)
+
+category_var6 <- table(data$CardiovascularDisease)
+print(category_var6)
+
+category_var7 <- table(data$Diabetes)
+print(category_var7)
+
+category_var8 <- table(data$Depression)
+print(category_var8)
+
+category_var9 <- table(data$HeadInjury)
+print(category_var9)
+
+category_var10 <- table(data$Hypertension)
+print(category_var10)
+
+category_var11 <- table(data$MemoryComplaints)
+print(category_var11)
+
+category_var12 <- table(data$BehavioralProblems)
+print(category_var12)
+
+category_var13 <- table(data$Confusion)
+print(category_var13)
+
+category_var14 <- table(data$Disorientation)
+print(category_var14)
+
+category_var15 <- table(data$PersonalityChanges)
+print(category_var15)
+
+category_var16 <- table(data$DifficultyCompletingTasks)
+print(category_var16)
+
+category_var17 <- table(data$Forgetfulness)
+print(category_var17)
+
+category_var18 <- table(data$Diagnosis)
+print(category_var18)
+
+category_var19 <- table(data$DoctorInCharge)
+print(category_var19)
+
+
+```
+## Draw EDA graphs ##
+```{r}
+library(dplyr)
+library(ggplot2)
+
+data <- data %>%
+  mutate(Diagnosis = as.factor(Diagnosis))
+
+  ## 1. Predictors(numerical)
+as_tibble(data) %>% ggplot(aes(x=Age,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("Age") + ggtitle("Histogram of Age")
+as_tibble(data) %>% ggplot(aes(x=BMI,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("BMI") + ggtitle("Histogram of BMI")
+as_tibble(data) %>% ggplot(aes(x=AlcoholConsumption,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("AlcoholConsumption") + ggtitle("Histogram of AlcoholConsumption")
+as_tibble(data) %>% ggplot(aes(x=PhysicalActivity,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("PhysicalActivity") + ggtitle("Histogram of Ease of PhysicalActivity")
+as_tibble(data) %>% ggplot(aes(x=DietQuality,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("DietQuality") + ggtitle("Histogram of DietQuality")
+as_tibble(data) %>% ggplot(aes(x=SleepQuality,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("SleepQuality") + ggtitle("Histogram of SleepQuality")
+as_tibble(data) %>% ggplot(aes(x=SystolicBP,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("SystolicBP") + ggtitle("Histogram of SystolicBP")
+as_tibble(data) %>% ggplot(aes(x=DiastolicBP,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("Ease of DiastolicBP") + ggtitle("Histogram of DiastolicBP")
+as_tibble(data) %>% ggplot(aes(x=CholesterolTotal,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("CholesterolTotal") + ggtitle("Histogram of CholesterolTotal")
+as_tibble(data) %>% ggplot(aes(x=CholesterolLDL,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("CholesterolLDL") + ggtitle("Histogram of CholesterolLDL")
+as_tibble(data) %>% ggplot(aes(x=CholesterolHDL,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("CholesterolHDL") + ggtitle("Histogram of CholesterolHDL")
+as_tibble(data) %>% ggplot(aes(x=CholesterolTriglycerides,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("CholesterolTriglycerides") + ggtitle("Histogram of Ease of CholesterolTriglycerides")
+as_tibble(data) %>% ggplot(aes(x=MMSE,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("MMSE") + ggtitle("Histogram of MMSE")
+as_tibble(data) %>% ggplot(aes(x=FunctionalAssessment,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("FunctionalAssessment") + ggtitle("Histogram of FunctionalAssessment")
+as_tibble(data) %>% ggplot(aes(x=ADL,fill=Diagnosis)) + geom_histogram(position="dodge",binwidth=1) + 
+                            xlab("ADL") + ggtitle("Histogram of Ease of ADL")
+
+#Age BMI AlcoholConsumption PhysicalActivity DietQuality SleepQuality SystolicBP DiastolicBP CholesterolTotal CholesterolLDL CholesterolHDL CholesterolTriglycerides MMSE         FunctionalAssessment ADL
+
+
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=Age)) + geom_boxplot() + xlab("Age") + ggtitle("Boxplot of Age")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=BMI)) + geom_boxplot() + xlab("BMI") + ggtitle("Boxplot of BMI")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=AlcoholConsumption)) + geom_boxplot() + xlab("AlcoholConsumption") + ggtitle("Boxplot of AlcoholConsumption")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=PhysicalActivity)) + geom_boxplot() + 
+  xlab("PhysicalActivity") + ggtitle("Boxplot of PhysicalActivity")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=DietQuality)) + geom_boxplot() + xlab("DietQuality") + ggtitle("Boxplot of DietQuality")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=SleepQuality)) + geom_boxplot() + xlab("SleepQuality") + ggtitle("Boxplot of SleepQuality")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=SystolicBP)) + geom_boxplot() + xlab("SystolicBP") + ggtitle("Boxplot of SystolicBP")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=DiastolicBP)) + geom_boxplot() + 
+  xlab("Ease of DiastolicBP") + ggtitle("Boxplot of DiastolicBP")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=CholesterolTotal)) + geom_boxplot() + xlab("CholesterolTotal") + ggtitle("Boxplot of CholesterolTotal")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=CholesterolLDL)) + geom_boxplot() + xlab("CholesterolLDL") + ggtitle("Boxplot of CholesterolLDL")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=CholesterolHDL)) + geom_boxplot() + xlab("CholesterolHDL") + ggtitle("Boxplot of CholesterolHDL")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=CholesterolTriglycerides)) + geom_boxplot() + 
+  xlab("Ease of CholesterolTriglycerides") + ggtitle("Boxplot of CholesterolTriglycerides")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y= MMSE)) + geom_boxplot() + xlab("MMSE") + ggtitle("Boxplot of MMSE")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=FunctionalAssessment)) + geom_boxplot() + xlab("FunctionalAssessment") + ggtitle("Boxplot of FunctionalAssessment")
+as_tibble(data) %>% ggplot(aes(x=Diagnosis,y=ADL)) + geom_boxplot() + xlab("ADL") + ggtitle("ADL")
+
+
+  ## 2. response:
+as_tibble(data) %>% ggplot(aes(x=Diagnosis, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  scale_fill_manual(values=c("0"="turquoise", "1"="salmon")) +
+  labs(y="Count") + ggtitle("Barplot of Diagnosis") + 
+  theme_minimal()
+
+  ## 3. predictor(categorical)
+#Gender Ethnicity EducationLevel Smoking FamilyHistoryAlzheimers
+
+
+as_tibble(data) %>% ggplot(aes(x=Gender,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Gender",y="Count") + ggtitle("Barplot of Gender") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Ethnicity, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Ethnicity", y="Count") + ggtitle("Barplot of Ethnicity") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=EducationLevel,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "EducationLevel",y="Count") + ggtitle("Barplot of EducationLevel") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Smoking,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Smoking",y="Count") + ggtitle("Barplot of Smoking") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=FamilyHistoryAlzheimers, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "FamilyHistoryAlzheimers", y="Count") + ggtitle("Barplot of FamilyHistoryAlzheimers") + 
+  theme_minimal()
+
+#CardiovascularDisease Diabetes Depression HeadInjury Hypertension MemoryComplaints 
+ 
+ 
+as_tibble(data) %>% ggplot(aes(x=CardiovascularDisease,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "CardiovascularDisease",y="Count") + ggtitle("Barplot of CardiovascularDiseases") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Diabetes,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Diabetes",y="Count") + ggtitle("Barplot of Diabetes") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Depression, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Depression", y="Count") + ggtitle("Barplot of Depression") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=HeadInjury,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "HeadInjury",y="Count") + ggtitle("Barplot of HeadInjury") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Hypertension,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Hypertension",y="Count") + ggtitle("Barplot of Type of Hypertension") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=MemoryComplaints, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "MemoryComplaints", y="Count") + ggtitle("Barplot of MemoryComplaints") + 
+  theme_minimal()
+
+#BehavioralProblems Confusion      Disorientation PersonalityChanges DifficultyCompletingTasks Forgetfulness DoctorInCharge
+
+as_tibble(data) %>% ggplot(aes(x=BehavioralProblems,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "BehavioralProblems",y="Count") + ggtitle("Barplot of BehavioralProblems") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Confusion,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Confusion",y="Count") + ggtitle("Barplot of Confusion") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Disorientation, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Disorientation", y="Count") + ggtitle("Barplot of Disorientation") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=PersonalityChanges,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "PersonalityChanges",y="Count") + ggtitle("Barplot of PersonalityChanges") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=DifficultyCompletingTasks,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "DifficultyCompletingTasks",y="Count") + ggtitle("Barplot of DifficultyCompletingTasks") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=Forgetfulness, fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "Forgetfulness", y="Count") + ggtitle("Barplot of Forgetfulness") + 
+  theme_minimal()
+
+as_tibble(data) %>% ggplot(aes(x=DoctorInCharge,fill=Diagnosis)) +
+  geom_bar(stat="count") + 
+  labs(x = "DoctorInCharge",y="Count") + ggtitle("Barplot of DoctorInCharge") + 
+  theme_minimal()
+```
+##Support Vector Machine (SVM) with a Linear/Kernel Trick##
+
+```{r}
+# Install and load necessary packages
+# install.packages("e1071")
+library(e1071)
+library(dplyr)
+library(ggplot2)
+
+# Load Train and Test Data
+train_data <- read.csv("train.csv")
+test_data <- read.csv("test.csv")
+
+# Ensure Diagnosis is a factor
+train_data$Diagnosis <- as.factor(train_data$Diagnosis)
+
+# Identify predictors with fewer than two unique values
+#invalid_predictors <- sapply(train_data, function(col) length(unique(col)) < 2)
+
+# Print predictors with issues
+#names(which(invalid_predictors))
+
+# Convert character columns to factors
+train_data <- train_data %>%  #??delete
+  mutate(across(where(is.character), as.factor))
+
+#test_data <- test_data %>%  #??delete
+  #mutate(across(where(is.character), as.factor))
+# trian_data <- train_data %>%
+#   select(-DoctorInCharge)
+train_data <- train_data[, !names(train_data) %in% c("DoctorInCharge")]
+
+
+# Train an SVM Model
+# Correctly exclude DoctorInCharge and PatientID
+svm_model <- svm(Diagnosis ~ . , data = train_data, kernel = "linear")
+
+# Predict on test data
+# Ensure test_data does not include DoctorInCharge and PatientID
+# test_data <- test_data %>%
+#   select(-DoctorInCharge)
+test_data <- test_data[, !names(test_data) %in% c("DoctorInCharge")]
+
+
+svm_predictions <- predict(svm_model, test_data)
+
+# Create the submission file
+# Ensure PatientID exists in the test dataset
+submission <- data.frame(PatientID = test_data$PatientID, Diagnosis = svm_predictions)
+
+# Save the submission file
+# write.csv(submission, "submission.csv", row.names = FALSE)
+
+# print("Submission file created successfully!")
+
+```
+
+
+##Linear Discriminant Analysis (LDA)/QDA##
+
+```{r}
+# install.packages("MASS")
+library(MASS)
+
+
+# Train-Test Split
+
+# Train an LDA Model
+lda_model <- lda(Diagnosis ~ ., data = train_data)
+
+# Make Predictions
+lda_predictions <- predict(lda_model, test_data)
+
+# Create the submission file
+# Ensure PatientID exists in the test dataset
+submission <- data.frame(PatientID = test_data$PatientID, Diagnosis = lda_predictions)
+
+# Save the submission file
+# write.csv(submission, "submission_lda.csv", row.names = FALSE)
+
+# print("Submission file for lda created successfully!")
+
+
+# Train a QDA Model
+qda_model <- qda(Diagnosis ~ ., data = train_data)
+
+# Make Predictions
+qda_predictions <- predict(qda_model, test_data)
+
+# Create the submission file
+# Ensure PatientID exists in the test dataset
+submission <- data.frame(PatientID = test_data$PatientID, Diagnosis = qda_predictions)
+
+# Save the submission file
+# write.csv(submission, "submission_qda.csv", row.names = FALSE)
+
+# print("Submission file for qda created successfully!")
+
+
+```
+
+
+## XGB
+
+
+
+```{r}
+# # Load required libraries
+# library(xgboost)
+# library(dplyr)
+# 
+# # Specify predictors (use correct column names)
+# predictors <- c(
+#   "ADL", "FunctionalAssessment", "MMSE", "MemoryComplaints", 
+#   "BehavioralProblems", "CholesterolTriglycerides", "CholesterolTotal", 
+#   "CholesterolHDL", "DietQuality", "SleepQuality", "Age", 
+#   "AlcoholConsumption", "BMI", "SystolicBP", "PhysicalActivity", 
+#   "CholesterolLDL", "DiastolicBP", "EducationLevel", "Ethnicity", 
+#   "Smoking", "Gender"
+# )
+# 
+# # Load dataset
+# # Replace 'train.csv' and 'test.csv' with the actual file paths
+# train_data <- read.csv("train.csv")
+# test_data <- read.csv("test.csv")
+# 
+# # Ensure the datasets only include the specified predictors and Diagnosis
+# train_data <- train_data[, c(predictors, "Diagnosis"), drop = FALSE]
+# test_data <- test_data[, c(predictors), drop = FALSE]
+# 
+# # Convert categorical variables (if any) to numeric
+# train_data <- train_data %>% mutate(across(where(is.factor), as.numeric))
+# test_data <- test_data %>% mutate(across(where(is.factor), as.numeric))
+# 
+# # Ensure Diagnosis is numeric and binary (0/1) in train_data
+# train_data$Diagnosis <- as.numeric(train_data$Diagnosis)
+# 
+# # Prepare the training data matrix
+# train_matrix <- xgb.DMatrix(data = as.matrix(train_data[, -which(names(train_data) == "Diagnosis")]), 
+#                             label = train_data$Diagnosis)
+# 
+# # Fit the XGBoost model
+# xgb_model <- xgboost(
+#   data = train_matrix, 
+#   objective = "binary:logistic", 
+#   nrounds = 100,         # Number of boosting rounds
+#   max_depth = 4,         # Depth of trees
+#   eta = 0.05,            # Learning rate
+#   verbose = 0            # Suppress training output
+# )
+# 
+# # Predict probabilities on the training data
+# xgb_train_pred <- predict(xgb_model, train_matrix)
+# 
+# # Convert probabilities to class labels (0 or 1)
+# xgb_train_pred_class <- ifelse(xgb_train_pred > 0.5, 1, 0)
+# 
+# # Compute confusion matrix and evaluation metrics on training data
+# conf_matrix <- table(Predicted = xgb_train_pred_class, Actual = train_data$Diagnosis)
+# print(conf_matrix)
+# 
+# # Calculate evaluation metrics
+# accuracy <- mean(xgb_train_pred_class == train_data$Diagnosis)
+# precision <- sum((xgb_train_pred_class == 1) & (train_data$Diagnosis == 1)) / sum(xgb_train_pred_class == 1)
+# recall <- sum((xgb_train_pred_class == 1) & (train_data$Diagnosis == 1)) / sum(train_data$Diagnosis == 1)
+# f1_score <- 2 * (precision * recall) / (precision + recall)
+# 
+# # Output metrics
+# cat("Accuracy:", accuracy, "\n")
+# cat("Precision:", precision, "\n")
+# cat("Recall:", recall, "\n")
+# cat("F1 Score:", f1_score, "\n")
+# 
+# # Prepare the test data matrix
+# test_matrix <- xgb.DMatrix(data = as.matrix(test_data))
+# 
+# # Predict probabilities on the test data
+# xgb_test_pred <- predict(xgb_model, test_matrix)
+# 
+# # Convert probabilities to class labels (0 or 1)
+# xgb_test_pred_class <- ifelse(xgb_test_pred > 0.5, 1, 0)
+# 
+# 
+# 
+# 
+# 
+# ####333]
+# # Check dimensions of test_data and predictions
+# cat("Dimensions of test_data:", dim(test_data), "\n")
+# cat("Length of xgb_test_pred:", length(xgb_test_pred), "\n")
+# 
+# # Ensure test_data contains predictors used during training
+# test_data <- test_data[, predictors, drop = FALSE]  # Keep only relevant columns
+# 
+# # Check if PatientID exists in test_data
+# if (!"PatientID" %in% colnames(test_data)) {
+#   stop("The test_data does not contain a 'PatientID' column.")
+# }
+# 
+# # Prepare test matrix for predictions (if not already done)
+# test_matrix <- xgb.DMatrix(data = as.matrix(test_data))
+# 
+# # Make predictions (if not already done)
+# xgb_test_pred <- predict(xgb_model, test_matrix)
+# 
+# # Ensure predictions align with test_data rows
+# if (nrow(test_data) != length(xgb_test_pred)) {
+#   stop("Mismatch between test_data rows and XGBoost predictions.")
+# }
+# 
+# # Create predictions data frame
+# predictions <- data.frame(
+#   PatientID = test_data$PatientID,  # Ensure PatientID exists in test data
+#   Probability = xgb_test_pred, 
+#   Predicted_Class = ifelse(xgb_test_pred > 0.5, 1, 0)  # Convert probabilities to class labels
+# )
+# 
+# # Save predictions
+# write.csv(predictions, "test_predictions_xgb.csv", row.names = FALSE)
+# cat("Predictions have been saved to 'test_predictions_xgb.csv'.\n")
+# 
+# # Create submission file
+# submission <- data.frame(
+#   PatientID = test_data$PatientID,  # PatientID column from test dataset
+#   Diagnosis = predictions$Predicted_Class  # Predicted Diagnosis
+# )
+# 
+# # Save submission file
+# write.csv(submission, "submission_xgb.csv", row.names = FALSE)
+# cat("Submission file for XGBoost created successfully!\n")
+
+
+```
+
+
+
+```{r}
+# Load required libraries
+library(xgboost)
+library(dplyr)
+
+# Specify predictors (use correct column names)
+predictors <- c(
+  "ADL", "FunctionalAssessment", "MMSE", "MemoryComplaints", 
+  "BehavioralProblems", "CholesterolTriglycerides", "CholesterolTotal", 
+  "CholesterolHDL", "DietQuality", "SleepQuality", "Age", 
+  "AlcoholConsumption", "BMI", "SystolicBP", "PhysicalActivity", 
+  "CholesterolLDL", "DiastolicBP", "EducationLevel", "Ethnicity", 
+  "Smoking", "Gender"
+)
+
+# Load datasets
+train_data <- read.csv("train.csv")
+test_data <- read.csv("test.csv")
+
+# Ensure the PatientID column is retained in test_data
+if (!"PatientID" %in% colnames(test_data)) {
+  stop("The test_data does not contain a 'PatientID' column.")
+}
+
+# Separate PatientID from predictors for test_data
+patient_ids <- test_data$PatientID
+
+# Ensure the datasets only include the specified predictors and Diagnosis (excluding PatientID for processing)
+train_data <- train_data[, c(predictors, "Diagnosis"), drop = FALSE]
+test_data <- test_data[, predictors, drop = FALSE]
+
+# Convert categorical variables (if any) to numeric
+train_data <- train_data %>% mutate(across(where(is.factor), as.numeric))
+test_data <- test_data %>% mutate(across(where(is.factor), as.numeric))
+
+# Ensure Diagnosis is numeric and binary (0/1) in train_data
+train_data$Diagnosis <- as.numeric(train_data$Diagnosis)
+
+# Prepare the training data matrix
+train_matrix <- xgb.DMatrix(data = as.matrix(train_data[, -which(names(train_data) == "Diagnosis")]), 
+                            label = train_data$Diagnosis)
+
+# Fit the XGBoost model
+xgb_model <- xgboost(
+  data = train_matrix, 
+  objective = "binary:logistic", 
+  nrounds = 100,         # Number of boosting rounds
+  max_depth = 4,         # Depth of trees
+  eta = 0.05,            # Learning rate
+  verbose = 0, # Suppress training output
+  gamma = 1
+)
+
+# Prepare the test data matrix
+test_matrix <- xgb.DMatrix(data = as.matrix(test_data))
+
+# Make predictions
+xgb_test_pred <- predict(xgb_model, test_matrix)
+
+# Convert probabilities to class labels (0 or 1)
+xgb_test_pred_class <- ifelse(xgb_test_pred > 0.5, 1, 0)
+
+# Create predictions data frame
+predictions <- data.frame(
+  PatientID = patient_ids,  # Use saved PatientID
+  Probability = xgb_test_pred, 
+  Predicted_Class = xgb_test_pred_class
+)
+
+# Save predictions for further analysis
+write.csv(predictions, "test_predictions_xgb_0.01.csv", row.names = FALSE)
+cat("Predictions have been saved to 'test_predictions_xgb_0.01.csv'.\n")
+
+# Create submission file
+submission <- data.frame(
+  PatientID = patient_ids,  # Use saved PatientID
+  Diagnosis = xgb_test_pred_class  # Predicted Diagnosis
+)
+
+# Save submission file
+write.csv(submission, "submission_xgb_0.01.csv", row.names = FALSE)
+cat("Submission file for XGBoost created successfully!\n")
+
+
+# Calculate Mean Squared Error (MSE) on the training data
+mse_train <- mean((xgb_train_pred - train_data$Diagnosis)^2)
+cat("Training MSE:", mse_train, "\n")
+
+# Ensure test_data contains true labels
+if ("Diagnosis" %in% colnames(test_data)) {
+  mse_test <- mean((xgb_test_pred - test_data$Diagnosis)^2)
+  cat("Test MSE:", mse_test, "\n")
+} else {
+  cat("Test data does not have true labels for MSE calculation.\n")
+}
+
+```
+
+
+```{r grid research}
+# it takes long time
+# Define the parameter grid
+param_grid <- expand.grid(
+  eta = c(0.01, 0.05, 0.02),       # Learning rates
+  max_depth = c(3, 4, 5),         # Tree depths
+  gamma = c(0, 1, 5),             # Minimum loss reduction
+  nrounds = c(50, 100, 150)       # Number of boosting rounds
+)
+set.seed(1)
+
+# Initialize a results data frame
+grid_results <- data.frame(
+  eta = numeric(),
+  max_depth = integer(),
+  gamma = numeric(),
+  nrounds = integer(),
+  Best_Logloss = numeric()
+)
+
+# Perform grid search
+for (i in 1:nrow(param_grid)) {
+  params <- list(
+    booster = "gbtree",
+    objective = "binary:logistic",
+    eta = param_grid$eta[i],
+    max_depth = param_grid$max_depth[i],
+    gamma = param_grid$gamma[i],
+    eval_metric = "logloss"
+  )
+  
+  # Perform cross-validation
+  cv <- xgb.cv(
+    params = params,
+    data = train_matrix,
+    nrounds = param_grid$nrounds[i],
+    nfold = 5,
+    verbose = 0,
+    early_stopping_rounds = 10,
+    maximize = FALSE
+  )
+  
+  # Record results
+  best_logloss <- min(cv$evaluation_log$test_logloss_mean)
+  grid_results <- rbind(grid_results, cbind(
+    eta = param_grid$eta[i],
+    max_depth = param_grid$max_depth[i],
+    gamma = param_grid$gamma[i],
+    nrounds = param_grid$nrounds[i],
+    Best_Logloss = best_logloss
+  ))
+}
+
+# Find the best combination of parameters
+best_params <- grid_results[which.min(grid_results$Best_Logloss), ]
+cat("Best Parameters:\n")
+print(best_params)
+
+```
+
+
+```{r final model for submission}
+final_model <- xgboost(
+  data = train_matrix,
+  objective = "binary:logistic",
+  eta = 0.05, # best_params$eta,
+  max_depth = 5, # best_params$max_depth,
+  gamma = 1, # best_params$gamma,
+  nrounds = 100,# best_params$nrounds,
+  verbose = 1
+)
+
+
+# Prepare the test data matrix
+test_matrix <- xgb.DMatrix(data = as.matrix(test_data))
+
+# Make predictions
+xgb_test_pred <- predict(final_model, test_matrix)
+
+# Convert probabilities to class labels (0 or 1)
+xgb_test_pred_class <- ifelse(xgb_test_pred > 0.5, 1, 0)
+
+# Create predictions data frame
+predictions <- data.frame(
+  PatientID = patient_ids,  # Use saved PatientID
+  Probability = xgb_test_pred, 
+  Predicted_Class = xgb_test_pred_class
+)
+
+# Save predictions for further analysis
+write.csv(predictions, "test_predictions_xgb_0.01.csv", row.names = FALSE)
+cat("Predictions have been saved to 'test_predictions_xgb_0.05.csv'.\n")
+
+# Create submission file
+submission <- data.frame(
+  PatientID = patient_ids,  # Use saved PatientID
+  Diagnosis = xgb_test_pred_class  # Predicted Diagnosis
+)
+
+# Save submission file
+write.csv(submission, "submission_xgb_0.05.csv", row.names = FALSE)
+cat("Submission file for XGBoost created successfully!\n")
+
+
+# Calculate Mean Squared Error (MSE) on the training data
+mse_train <- mean((xgb_train_pred - train_data$Diagnosis)^2)
+cat("Training MSE:", mse_train, "\n")
+```
+
+
+```{r}
+summary(final_model)
+# Load required libraries
+library(caret)    # For confusion matrix and evaluation metrics
+
+# Predict probabilities for the training data
+train_pred_prob <- predict(final_model, newdata = train_matrix)
+
+# Convert probabilities to class labels (0 or 1)
+train_pred_class <- ifelse(train_pred_prob > 0.5, 1, 0)
+
+# True labels
+true_labels <- train_data$Diagnosis
+
+# Confusion Matrix
+conf_matrix <- table(Predicted = train_pred_class, Actual = true_labels)
+
+# Extract values from the confusion matrix
+true_positive <- conf_matrix[2, 2]
+true_negative <- conf_matrix[1, 1]
+false_positive <- conf_matrix[2, 1]
+false_negative <- conf_matrix[1, 2]
+
+# Calculate metrics
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+precision <- true_positive / (true_positive + false_positive)
+recall <- true_positive / (true_positive + false_negative)
+f1_score <- 2 * (precision * recall) / (precision + recall)
+
+
+# Output results
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Recall:", recall, "\n")
+cat("F1 Score:", f1_score, "\n")
+conf_matrix
+# Calculate Mean Squared Error (MSE)
+mse <- mean((train_pred_prob - true_labels)^2)
+
+# Output the MSE value
+cat("Mean Squared Error (MSE):", mse, "\n")
+
+
+```
+## Decision Tree
+```{r}
+library(rpart)
+library(caret)
+
+# Ensure Diagnosis is a factor (for classification)
+train_data$Diagnosis <- factor(train_data$Diagnosis, levels = c(0, 1))  # 0 = negative, 1 = positive
+
+# Fit a Decision Tree model
+dt_model <- rpart(Diagnosis ~ ., data = train_data, method = "class")
+
+# Predict on train data and get class labels
+dt_pred_train <- predict(dt_model, train_data, type = "class")
+
+# Confusion Matrix for Decision Tree on train data
+dt_cm_train <- table(Predicted = dt_pred_train, Actual = train_data$Diagnosis)
+
+# Extract metrics for Decision Tree from the confusion matrix
+dt_accuracy_train <- sum(diag(dt_cm_train)) / sum(dt_cm_train)
+dt_precision_train <- dt_cm_train[2, 2] / sum(dt_cm_train[, 2])
+dt_recall_train <- dt_cm_train[2, 2] / sum(dt_cm_train[2, ])
+dt_f1_train <- 2 * (dt_precision_train * dt_recall_train) / (dt_precision_train + dt_recall_train)
+
+# Print Decision Tree Metrics for Train Data
+cat("\nDecision Tree Metrics (Train Data):\n")
+cat("Accuracy:", dt_accuracy_train, "\n")
+cat("Precision:", dt_precision_train, "\n")
+cat("Recall:", dt_recall_train, "\n")
+cat("F1 Score:", dt_f1_train, "\n")
+
+# Print the Confusion Matrix for Decision Tree
+cat("\nConfusion Matrix for Decision Tree (Train Data):\n")
+print(dt_cm_train)
+
+
+# 1. Ensure 'Diagnosis' is numeric
+train_data$Diagnosis <- as.numeric(as.character(train_data$Diagnosis))
+
+# 2. Decision Tree MSE
+dt_pred_prob_train <- predict(dt_model, train_data, type = "prob")[, 2]  # Get probabilities for class 1
+mse_dt_train <- mean((dt_pred_prob_train - train_data$Diagnosis)^2)
+
+cat("Mean Squared Error (MSE) for Decision Tree (Train Data):", mse_dt_train, "\n")
+
+# Plot the decision tree
+library(rpart.plot)
+rpart.plot(dt_model, type = 3, extra = 101, fallen.leaves = TRUE, main = "Decision Tree for Diagnosis")
+
+
+```
+
+## Random Forest
+
+```{r}
+library(randomForest)
+library(caret)
+
+# Ensure Diagnosis is a factor (for classification)
+train_data$Diagnosis <- factor(train_data$Diagnosis, levels = c(0, 1))  # 0 = negative, 1 = positive
+
+# Fit a Random Forest model
+rf_model <- randomForest(Diagnosis ~ ., data = train_data)
+
+# Predict on train data and get class labels (type = "response" ensures class labels)
+rf_pred_train <- predict(rf_model, train_data, type = "response")
+
+# Confusion Matrix for Random Forest on train data
+rf_cm_train <- table(Predicted = rf_pred_train, Actual = train_data$Diagnosis)
+
+# Extract metrics for Random Forest from the confusion matrix
+rf_accuracy_train <- sum(diag(rf_cm_train)) / sum(rf_cm_train)
+rf_precision_train <- rf_cm_train[2, 2] / sum(rf_cm_train[, 2])
+rf_recall_train <- rf_cm_train[2, 2] / sum(rf_cm_train[2, ])
+rf_f1_train <- 2 * (rf_precision_train * rf_recall_train) / (rf_precision_train + rf_recall_train)
+
+cat("\nRandom Forest Metrics (Train Data):\n")
+cat("Accuracy:", rf_accuracy_train, "\n")
+cat("Precision:", rf_precision_train, "\n")
+cat("Recall:", rf_recall_train, "\n")
+cat("F1 Score:", rf_f1_train, "\n")
+
+# Print the Confusion Matrix for Random Forest
+cat("\nConfusion Matrix for Random Forest (Train Data):\n")
+print(rf_cm_train)
+
+# Ensure 'Diagnosis' is numeric
+train_data$Diagnosis <- as.numeric(as.character(train_data$Diagnosis))
+
+
+rf_pred_prob_train <- predict(rf_model, train_data, type = "prob")[, 2]  # Get probabilities for class 1
+mse_rf_train <- mean((rf_pred_prob_train - train_data$Diagnosis)^2)
+
+# Print MSE for Random Forest
+cat("Mean Squared Error (MSE) for Random Forest (Train Data):", mse_rf_train, "\n")
+```
+
+
+## Logistic Regression
+
+```{r}
+library(caret)
+library(ggplot2)
+library(lattice)
+data <- read.csv("train.csv")
+```
+
+```{r}
+# data[is.na(data)] <- lapply(data, function(x) ifelse(is.numeric(x), mean(x, na.rm = TRUE), x))
+# missing data
+sapply(data, function(x)any(is.na(x)))
+
+X <- data[, !names(data) %in% c("Diagnosis", "PatientID", "DoctorInCharge")]
+y <- as.factor(data$Diagnosis)
+```
+
+```{r}
+preProc <- preProcess(X, method = c("center", "scale"))
+X <- predict(preProc, X)
+
+X[] <- lapply(X, function(x) if(is.factor(x)) as.numeric(as.character(x)) else x)
+```
+
+```{r}
+# Logistic Regression
+control <- rfeControl(functions = lrFuncs, method = "cv", number = 10)
+
+
+rfe_result <- rfe(X, y, sizes = c(5, 31, 32), rfeControl = control)
+selected_features <- predictors(rfe_result)
+print(selected_features)
+```
+
+```{r}
+X_selected <- X[, selected_features]
+
+train_control <- trainControl(method = "cv", number = 10)
+
+grid <- expand.grid(.C = c(0.01, 0.1, 1, 10, 100))
+
+
+model_train <- train(X_selected, y, method = "glm", family = binomial,
+               trControl = train_control)
+print(model_train)
+
+model0 <- model_train$finalModel
+```
+
+```{r}
+predictions <- predict(model_train, X_selected)
+
+
+conf_matrix <- confusionMatrix(predictions, as.factor(y))
+print(conf_matrix)
+
+
+accuracy <- conf_matrix$overall["Accuracy"]
+precision <- conf_matrix$byClass["Pos Pred Value"]
+recall <- conf_matrix$byClass["Sensitivity"]
+f1_score <- 2 * (precision * recall) / (precision + recall)
+
+cat("Accuracy:", accuracy, "\n")
+cat("Precision:", precision, "\n")
+cat("Recall:", recall, "\n")
+cat("F1 Score:", f1_score, "\n")
+
+bic0 <- BIC(model0)
+print(bic0)
+
+summary(model0)
+
+cv_results <- model_train$resample
+mean_accuracy <- mean(cv_results$Accuracy)
+
+actual <- data$Diagnosis
+error_rate <- mean(predictions != actual)
+print(error_rate)
+```
+
+```{r}
+# test_data <- read.csv("test.csv")
+# result <- read.csv("submission.csv")
+# predictions_test <- predict(model_train, newdata = test_data)
+# print(predictions_test)
+# print(predictions)
+# result$Diagnosis <- predictions_test
+```
