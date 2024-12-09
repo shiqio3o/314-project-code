@@ -848,6 +848,8 @@ cat("Mean Squared Error (MSE) for Random Forest (Train Data):", mse_rf_train, "\
 ## Logistic Regression
 
 ```{r}
+# it may need to restart R to run this section
+# install.packages("caret")
 library(caret)
 library(ggplot2)
 library(lattice)
